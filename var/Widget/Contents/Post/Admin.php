@@ -124,7 +124,9 @@ class Widget_Contents_Post_Admin extends Widget_Abstract_Contents
         /** 如果具有编辑以上权限,可以查看所有文章,反之只能查看自己的文章 */
         if (!$this->user->pass('editor', true)) {
             $select->where('table.contents.authorId = ?', $this->user->uid);
-        } else {
+        }  else if (isset($this->request->uid)) {
+				$select->where('table.contents.authorId = ?', $this->request->filter('int')->uid);
+		} else {
             if ('on' == $this->request->__typecho_all_posts) {
                 Typecho_Cookie::set('__typecho_all_posts', 'on');
             } else {
